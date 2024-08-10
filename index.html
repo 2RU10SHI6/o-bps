@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>o-BPS算出ツール</title>
+</head>
+<body>
+    <h1>薔薇と椿 o-BPS算出ツール</h1>
+    <label>有効フレーム数</label> <input id="frame" value=286><br>
+    <label>おビンタ前点数</label> <input id="old_point"><br>
+    <label>おビンタ後点数</label> <input id="current_point"><br>
+    <button onclick="getBPS()">o-BPSを算出</button>
+    <h2>あなたのo-BPSは <strong><span id="bps">0</span></strong> ですわ。</h2>
+</body>
+<script>
+    const f = document.getElementById("frame");
+    const op = document.getElementById("old_point");
+    const cp = document.getElementById("current_point");
+    const bps = document.getElementById("bps");
+
+    function getBPS(){
+        let frame = f.value;
+        let old_point = op.value;
+        let current_point = cp.value;
+        let i;
+        let sum = 0;
+
+        for(i = 0; sum < current_point - old_point; i++){
+            sum += 10*(i+1);
+        }
+
+        bps.innerText = Math.round((i / (frame / 60)) * 100) / 100;
+    }
+</script>
+</html>
