@@ -8,9 +8,9 @@
 <body>
     <h1>薔薇と椿 o-BPS算出ツール</h1>
     <label>有効フレーム数</label> <input id="frame" value=286><br>
-    <label>おビンタ前点数</label> <input id="old_point"><br>
-    <label>おビンタ後点数</label> <input id="current_point"><br>
-    <button onclick="getBPS()">o-BPSを算出</button>
+    <label>おビンタ前点数</label> <input id="old_point" value="0"><br>
+    <label>おビンタ後点数</label> <input id="current_point" value="0"><br><br>
+    <button onclick="getBPS()">o-BPSを算出</button> <button onclick="Reset()">値をリセット</button><br><br>
     <h2>あなたのo-BPSは <strong><span id="bps">0</span></strong> ですわ。</h2>
 </body>
 <script>
@@ -19,18 +19,26 @@
     const cp = document.getElementById("current_point");
     const bps = document.getElementById("bps");
 
-    function getBPS(){
-        let frame = f.value;
-        let old_point = op.value;
-        let current_point = cp.value;
-        let i;
-        let sum = 0;
+    cp.addEventListener("keydown", isEnterPushed);
+    function isEnterPushed(e){
+        if(e.key === "Enter"){
+            getBPS();
+        }
+        return false;
+    }
 
-        for(i = 0; sum < current_point - old_point; i++){
+    function getBPS(){
+        let i, sum = 0;
+        for(i = 0; sum < cp.value - op.value; i++){
             sum += 10*(i+1);
         }
+        bps.innerText = Math.round((i / (f.value / 60)) * 100) / 100;
+    }
 
-        bps.innerText = Math.round((i / (frame / 60)) * 100) / 100;
+    function Reset(){
+        op.value = 0;
+        cp.value = 0;
+        bps.innerText = 0;
     }
 </script>
 </html>
