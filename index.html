@@ -39,7 +39,6 @@
     function getBPS(){
         if(isNaN(f.value) || isNaN(op.value) || isNaN(cp.value)){
             alert("入力は半角英数字である必要がありますわ。\n淑女の常識でしてよ。礼儀も何もあつたものぢやないわね。");
-            f.value = 286;
             Reset();
             return;
         }
@@ -56,6 +55,7 @@
     function Reset(){
         op.value = 0;
         cp.value = 0;
+        f.value = 286;
         t.innerText = 0;
         s.innerText = Math.round((f.value / 60) * 100) / 100;
         bps.innerText = 0;
