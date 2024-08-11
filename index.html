@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,26 @@
 </head>
 <body>
     <h1>薔薇と椿 o-BPS算出ツール</h1>
-    <label>有効フレーム数</label> <input id="frame" value=286><br>
-    <label>おビンタ前点数</label> <input id="old_point" value="0"><br>
-    <label>おビンタ後点数</label> <input id="current_point" value="0"><br><br>
-    <button onclick="getBPS()">o-BPSを算出</button> <button onclick="Reset()">値をリセット</button><br><br>
-    <h2>あなたのo-BPSは <strong><span id="bps">0</span></strong> ですわ。</h2>
+    <p>
+        <label>有効フレーム数</label> <input id="frame" value=286 pattern="\d*" onclick="this.select()"><br>
+        <label>おビンタ前点数</label> <input id="old_point" value="0" onclick="this.select()"><br>
+        <label>おビンタ後点数</label> <input id="current_point" value="0" onclick="this.select()">
+    </p>
+    <button onclick="getBPS()">o-BPSを算出</button>
+    <br><br>
+    <p>
+        <font size="6">あなたのo-BPSは <strong><span id="bps">0</span></strong> ですわ。</font><br>
+        <font size="4">o-BPS = <span id="times">0</span> (回数) / <span id="seconds">4.77</span> (秒)</font>
+    </p>
+    <button onclick="Reset()">値をリセット</button>
 </body>
 <script>
     const f = document.getElementById("frame");
     const op = document.getElementById("old_point");
     const cp = document.getElementById("current_point");
     const bps = document.getElementById("bps");
+    const t = document.getElementById("times");
+    const s = document.getElementById("seconds");
 
     cp.addEventListener("keydown", isEnterPushed);
     function isEnterPushed(e){
@@ -28,16 +37,27 @@
     }
 
     function getBPS(){
-        let i, sum = 0;
-        for(i = 0; sum < cp.value - op.value; i++){
-            sum += 10*(i+1);
+        if(isNaN(f.value) || isNaN(op.value) || isNaN(cp.value)){
+            alert("入力は半角英数字である必要がありますわ。\n淑女の常識でしてよ。礼儀も何もあつたものぢやないわね。");
+            f.value = 286;
+            Reset();
+            return;
         }
-        bps.innerText = Math.round((i / (f.value / 60)) * 100) / 100;
+
+        let times, sum = 0;
+        for(times = 0; sum < cp.value - op.value; times++){
+            sum += 10*(times+1);
+        }
+        t.innerText = times;
+        s.innerText = Math.round((f.value / 60) * 100) / 100;
+        bps.innerText = Math.round((times / (f.value / 60)) * 100) / 100;
     }
 
     function Reset(){
         op.value = 0;
         cp.value = 0;
+        t.innerText = 0;
+        s.innerText = Math.round((f.value / 60) * 100) / 100;
         bps.innerText = 0;
     }
 </script>
