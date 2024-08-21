@@ -52,14 +52,14 @@
         }
 
         let times = 0, sum = 0;
-        do {
+        while(sum < cp.value - op.value){
             times++;
             sum += 10*times;
             if(sum > cp.value - op.value){
                 alert("点数が等差数列の和の形になつておりません。入力した御得点が正しいか確認してくださひ。\nこれから表示するoBPSは回数を切り捨てした参考値ですわ。");
                 times--;
             }
-        } while (sum < cp.value - op.value);
+        }
 
         t.innerText = times;
         s.innerText = Math.round((f.value / 60) * 100) / 100;
