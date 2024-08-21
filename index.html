@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>o-BPS算出ツール</title>
+    <title>oBPS算出ツール</title>
 </head>
 <body>
-    <h1>薔薇と椿 o-BPS算出ツール</h1>
+    <h1>薔薇と椿 oBPS算出ツール</h1>
     <p>
-        <label>有効フレーム数</label> <input id="frame" value=286 onclick="this.select()"><br>
-        <label>おビンタ前点数</label> <input id="old_point" value="0" onclick="this.select()"><br>
-        <label>おビンタ後点数</label> <input id="current_point" value="0" onclick="this.select()">
+        <label>お有効フレーム数</label> <input id="frame" value=286 pattern="\d*" onclick="this.select()"><br>
+        <label>おビンタ前御得点</label> <input id="old_point" value="0" onclick="this.select()"><br>
+        <label>おビンタ後御得点</label> <input id="current_point" value="0" onclick="this.select()">
     </p>
-    <button onclick="getBPS()">o-BPSを算出</button>
+    <button onclick="getBPS()">oBPSを算出</button>
     <br><br>
     <p>
-        <font size="6">あなたのo-BPSは <strong><span id="bps">0</span></strong> ですわ。</font><br>
-        <font size="4">o-BPS = <span id="times">0</span> (回数) / <span id="seconds">4.77</span> (秒)</font>
+        <font size="6">あなたのoBPSは <strong><span id="bps">0</span></strong> ですわ。</font><br>
+        <font size="4">oBPS = <span id="times">0</span> (回数) / <span id="seconds">4.77</span> (秒)</font>
     </p>
     <button onclick="Reset()">値をリセット</button>
 </body>
@@ -39,14 +39,28 @@
     function getBPS(){
         if(isNaN(f.value) || isNaN(op.value) || isNaN(cp.value)){
             alert("入力は半角英数字である必要がありますわ。\n淑女の常識でしてよ。礼儀も何もあつたものぢやないわね。");
+            f.value = 286;
             Reset();
             return;
         }
 
-        let times, sum = 0;
-        for(times = 0; sum < cp.value - op.value; times++){
-            sum += 10*(times+1);
+        if(!(0 <= op.value && op.value <= cp.value)){
+            alert("負の数が含まれるか御得点の前後の大小関係がおかしいわ。\n下民の人間はそれも分からないのね。");
+            op.value = 0;
+            cp.value = 0;
+            return;
         }
+
+        let times = 0, sum = 0;
+        do {
+            times++;
+            sum += 10*times;
+            if(sum > cp.value - op.value){
+                alert("点数が等差数列の和の形になつておりません。入力した御得点が正しいか確認してくださひ。\nこれから表示するoBPSは回数を切り捨てした参考値ですわ。");
+                times--;
+            }
+        } while (sum < cp.value - op.value);
+
         t.innerText = times;
         s.innerText = Math.round((f.value / 60) * 100) / 100;
         bps.innerText = Math.round((times / (f.value / 60)) * 100) / 100;
@@ -55,7 +69,6 @@
     function Reset(){
         op.value = 0;
         cp.value = 0;
-        f.value = 286;
         t.innerText = 0;
         s.innerText = Math.round((f.value / 60) * 100) / 100;
         bps.innerText = 0;
